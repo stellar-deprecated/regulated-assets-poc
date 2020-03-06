@@ -1,24 +1,30 @@
 {
-	"name": "regulated-assets",
-	"version": "1.0.0",
-	"main": "index.js",
-	"license": "MIT",
-	"scripts": {
-		"wallet": "node wallet.js",
-		"bridge": "node bridge",
-		"bridge:watch": "nodemon bridge",
-		"compliance": "node compliance",
-		"compliance:watch": "nodemon compliance",
-		"start": "stmux --mouse -- [ 'npm run bridge:watch' : 'npm run compliance:watch' ]"
-	},
-	"dependencies": {
-		"blessed": "^0.1.81",
-		"cors": "^2.8.5",
-		"dotenv": "^8.2.0",
-		"express": "^4.17.1",
-		"node-fetch": "^2.6.0",
-		"stellar-sdk": "^4.0.1",
-		"stmux": "^1.8.0",
-		"terminal-kit": "^1.33.15"
-	}
+  "name": "regulated-assets",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "wallet": "node wallet.js",
+    "bridge": "node bridge",
+    "bridge:watch": "nodemon bridge --ignore admin-panel",
+    "compliance": "node compliance",
+    "compliance:watch": "nodemon compliance",
+    "start": "stmux --mouse -- [ 'npm run bridge:watch' : 'npm run compliance:watch' ]"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
+    "sequelize": "^5.21.5",
+    "sqlite3": "^4.1.1",
+    "stellar-sdk": "^4.0.1",
+    "stmux": "^1.8.0",
+    "terminal-kit": "^1.33.15"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }

@@ -9,7 +9,8 @@ const style = {
     height: "100%",
     overflow: "scroll",
     padding: 8,
-    whiteSpace: "pre"
+    whiteSpace: "pre",
+    boxSizing: "border-box"
   },
   ClearButton: {
     transform: "translateY(-2px)",
@@ -28,9 +29,7 @@ export default function LogViewer() {
 
   return (
     <div style={style.Container}>
-      <h1>
-        Logs <button style={style.ClearButton}>Clear</button>
-      </h1>
+      <h1>Logs</h1>
       {logs.map(log => (
         <div key={log.message}>{log.message}</div>
       ))}

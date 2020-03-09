@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const e = require("express");
 const StellarSdk = require("stellar-sdk");
 const { Account } = require("./models");
 const truncateAddress = require("./util/truncateAddress");
@@ -7,7 +8,13 @@ const { log } = require("./log");
 const server = new StellarSdk.Server("https://horizon-testnet.stellar.org");
 const issuer = StellarSdk.Keypair.fromSecret(process.env.ISSUER_SECRET);
 
+/**
+ * @param {e.Request} req
+ * @param {e.Response} res
+ */
 module.exports = async function(req, res, next) {
+  log("POST " + req.url);
+  log(" ");
   const envelope = StellarSdk.xdr.TransactionEnvelope.fromXDR(
     req.query.tx,
     "base64"

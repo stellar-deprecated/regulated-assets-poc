@@ -8,11 +8,15 @@ const app = express();
 app.use(cors());
 app.use(bodyParser());
 
+// Internal API for admin panel
+app.post("/admin/revoke", require("./revoke"));
+app.get("/admin/list", require("./list"));
+
+// External API for wallets
 app.get("/.well-known/stellar.toml", require("./toml"));
-app.get("/approve", require("./approve"));
-app.get("/deposit", require("./deposit"));
-app.get("/list", require("./list"));
-app.post("/revoke", require("./revoke"));
+app.get("/api/deposit", require("./deposit"));
+app.get("/api/approve", require("./approve"));
+app.get("/api/approve/status", require("./revocationStatus"));
 
 app.use(function(err, req, res, next) {
   console.error(err.stack);

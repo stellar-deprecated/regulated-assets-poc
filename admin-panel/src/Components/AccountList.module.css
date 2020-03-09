@@ -1,0 +1,13 @@
+.AccountsList {
+  font-family: monospace;
+}
+
+.AccountsList th {
+  font-size: 16px;
+  padding: 8px;
+  text-align: left;
+}
+.AccountsList td {
+  padding:8px;
+  font-size: 16px;
+}

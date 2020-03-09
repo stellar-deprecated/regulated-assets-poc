@@ -856,7 +856,7 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.5.5":
+"@babel/runtime@^7.1.5", "@babel/runtime@^7.5.5":
   version "7.8.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.8.7.tgz#8fefce9802db54881ba59f90bb28719b4996324d"
   integrity sha512-+AATMUFppJDw6aiR5NVPHqIQBlV/Pj8wY/EZH+lmvRdUo9xBaz/rF3alAwFJQavvKfeOlPE7oaaDHVbcySbCsg==
@@ -8447,6 +8447,14 @@ react-error-overlay@^6.0.6:
   version "6.0.6"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.6.tgz#ac4d9dc4c1b5c536c2c312bf66aa2b09bfa384e2"
   integrity sha512-Yzpno3enVzSrSCnnljmr4b/2KUQSMZaPuqmS26t9k4nW7uwJk6STWmH9heNjPuvqUTO3jOSPkHoKgO4+Dw7uIw==
+
+react-hooks-sse@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-hooks-sse/-/react-hooks-sse-1.0.0.tgz#740cc8b2bb78fa5ab713f07233f8f6c88adee5a3"
+  integrity sha512-dQcIy6t1m9QqWtnS751tYmHjPfYsqfldQGsHqNglV+JpWAwR8o1/yO72nCM5k60smHTiTJ6I01w1SL5JofknZw==
+  dependencies:
+    "@babel/runtime" "^7.1.5"
+    prop-types "^15.6.2"
 
 react-is@^16.12.0, react-is@^16.7.0, react-is@^16.9.0:
   version "16.13.0"

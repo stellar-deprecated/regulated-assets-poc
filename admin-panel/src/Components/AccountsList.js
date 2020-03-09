@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { ServerApi } from "stellar-sdk";
 import s from "./AccountList.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { refreshAccountList, revoke } from "../store/accounts";
@@ -33,11 +32,11 @@ function AccountRow({ account }) {
 }
 export default function AccountsList() {
   const dispatch = useDispatch();
-  const { loading, accounts } = useSelector(state => state.accounts);
+  const { accounts } = useSelector(state => state.accounts);
 
   useEffect(() => {
     dispatch(refreshAccountList());
-  }, []);
+  }, [dispatch]);
   return (
     <div>
       <div>

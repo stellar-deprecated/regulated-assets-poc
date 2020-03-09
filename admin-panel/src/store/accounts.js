@@ -23,7 +23,7 @@ export function refreshAccountList() {
 export function revoke(account, toRevoke) {
   return async function(dispatch) {
     dispatch({ type: ADD_PENDING_ACCOUNT, account });
-    const response = await fetch("/admin/revoke", {
+    await fetch("/admin/revoke", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -50,7 +50,7 @@ export default function reducer(state = initialState, action) {
       };
     case ADD_PENDING_ACCOUNT:
       const newPendingAccounts = [...state.pendingAccounts];
-      if (newPendingAccounts.indexOf(action.account) == -1) {
+      if (newPendingAccounts.indexOf(action.account) === -1) {
         newPendingAccounts.push(action.account);
       }
       return {

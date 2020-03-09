@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
 const PORT = process.env.BRIDGE_PORT || 3001;
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(bodyParser());
 // Internal API for admin panel
 app.post("/admin/revoke", require("./revoke"));
 app.get("/admin/list", require("./list"));
+app.get("/admin/logs", require("./log"));
 
 // External API for wallets
 app.get("/.well-known/stellar.toml", require("./toml"));

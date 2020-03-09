@@ -1,5 +1,4 @@
 import React from "react";
-import { ServerApi } from "stellar-sdk";
 import { useSelector } from "react-redux";
 
 const style = {
@@ -17,8 +16,14 @@ const style = {
 
   circulationContainer: {
     justifySelf: "flex-end",
-    flexGrow: 1,
     textAlign: "end"
+  },
+
+  title: {
+    fontSize: 24,
+    margin: 8,
+    flexGrow: 1,
+    textAlign: "center"
   }
 };
 export default function Header() {
@@ -40,10 +45,6 @@ export default function Header() {
       value + (account.status === "active" ? balanceOf(account, "REG") : 0)
     );
   }, 0);
-  const onChain = accounts.reduce(
-    (value, account) => value + balanceOf(account, "REG"),
-    0
-  );
 
   return (
     <div style={style.container}>
@@ -51,6 +52,7 @@ export default function Header() {
         <h1 style={style.h1}>Asset</h1>
         <h3 style={style.h3}>REG</h3>
       </div>
+      <div style={style.title}>Asset Issuer Admin Panel</div>
       <div style={style.circulationContainer}>
         <h1 style={style.h1}>In Circulation</h1>
         <h3 style={style.h3}>{loading ? "Loading..." : active}</h3>

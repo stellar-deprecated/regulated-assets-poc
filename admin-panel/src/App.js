@@ -1,4 +1,5 @@
 import React from "react";
+import { SSEProvider } from "react-hooks-sse";
 import AccountsList from "./Components/AccountsList";
 import Header from "./Components/Header";
 import LogViewer from "./Components/LogViewer";
@@ -25,7 +26,9 @@ function App() {
         <AccountsList />
       </div>
       <div style={style.FlexPart}>
-        <LogViewer />
+        <SSEProvider endpoint="http://localhost:3001/admin/logs">
+          <LogViewer />
+        </SSEProvider>
       </div>
     </div>
   );

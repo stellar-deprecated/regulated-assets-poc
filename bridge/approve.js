@@ -1,12 +1,13 @@
 const fetch = require("node-fetch");
 const StellarSdk = require("stellar-sdk");
 const { Account } = require("./models");
+const truncateAddress = require("./util/truncateAddress");
+const { log } = require("./log");
 
 const server = new StellarSdk.Server("https://horizon-testnet.stellar.org");
 const issuer = StellarSdk.Keypair.fromSecret(process.env.ISSUER_SECRET);
 
 module.exports = async function(req, res, next) {
-  console.log(req.query.tx);
   const envelope = StellarSdk.xdr.TransactionEnvelope.fromXDR(
     req.query.tx,
     "base64"
@@ -15,13 +16,13 @@ module.exports = async function(req, res, next) {
   let totalAmount = 0;
   let assetsToParticipantMap = {};
   let participants = [];
-  console.log("Checking operations in proposed transaction");
+  log("Checking operations in proposed transaction");
   tx.operations.forEach(operation => {
-    console.log("  Type: " + operation.type);
-    console.log("  Source: " + (operation.source || tx.source));
-    console.log("  Destination: " + operation.destination);
-    console.log("  Asset: " + operation.asset.getCode());
-    console.log("  Amount: " + operation.amount);
+    log("  Type: " + operation.type);
+    log("  Source: " + (operation.source || tx.source));
+    log("  Destination: " + operation.destination);
+    log("  Asset: " + operation.asset.getCode());
+    log("  Amount: " + operation.amount);
     participants.push(operation.destination);
     participants.push(operation.source || tx.source);
     if (operation.type === "payment") {
@@ -32,15 +33,20 @@ module.exports = async function(req, res, next) {
       assetsToParticipantMap[code].add(operation.destination);
     }
   });
-  console.log("Total Amount: " + totalAmount);
-  console.log("<<< Consulting Rules Engine API >>>");
+  log(" ");
+  log("Total Amount: " + totalAmount);
+  log(" ");
+  log("<<< Consulting Rules Engine API >>>");
   await new Promise(res => setTimeout(res, 1300));
+  log(" ");
   if (totalAmount > 50) {
-    console.log("Rejecting, amount over 50 REG limit");
+    log("❌ Rejecting, amount over 50 REG limit");
     res.send({
       status: "rejected",
       error: "Amount over 50 REG limit"
     });
+    log(" ");
+    log(" ");
     return;
   }
 
@@ -52,10 +58,16 @@ module.exports = async function(req, res, next) {
       }
     });
     if (dbAccount.status !== "active") {
+      const message = `Account ${truncateAddress(
+        participant
+      )} has had token access revoked`;
+      log(`❌ Rejecting: ${message}`);
       res.send({
         status: "rejected",
-        error: `Account ${participant} has had token access revoked`
+        error: message
       });
+      log(" ");
+      log(" ");
       return;
     }
   }
@@ -64,7 +76,8 @@ module.exports = async function(req, res, next) {
     server.loadAccount(tx.source),
     server.feeStats()
   ]);
-  console.log("Building revised sandwiched transaction");
+  log("Building revised sandwiched transaction");
+
   const sandwichTxBuilder = new StellarSdk.TransactionBuilder(sourceAccount, {
     fee: feeStats.fee_charged.p90,
     networkPassphrase: StellarSdk.Networks.TESTNET
@@ -74,7 +87,7 @@ module.exports = async function(req, res, next) {
     Object.keys(assetsToParticipantMap).forEach(asset => {
       const participants = assetsToParticipantMap[asset];
       participants.forEach(participantAddress => {
-        console.log(
+        log(
           `  ${
             allow ? "Allowing" : "Revoking"
           } asset ${asset} for participant ${participantAddress}`
@@ -92,17 +105,20 @@ module.exports = async function(req, res, next) {
   };
 
   setParticipantAuthorizations(true);
-  console.log("  Adding operations from original transaction ");
+  log("  Adding operations from original transaction ");
   envelope
     .tx()
     .operations()
     .forEach(op => sandwichTxBuilder.addOperation(op));
   setParticipantAuthorizations(false);
+  log(" ");
   // 5 minute for demo purposes so it doesn't timeout while we talk about it
   sandwichTxBuilder.setTimeout(300);
   const revisedTx = sandwichTxBuilder.build();
   revisedTx.sign(issuer);
-  console.log("Approved, sending revised transaction back to wallet");
+  log("Approved, sending revised transaction back to wallet");
+  log(" ");
+  log(" ");
   res.send({
     status: "revised",
     tx: revisedTx

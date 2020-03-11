@@ -7,9 +7,7 @@
     "wallet": "node wallet.js",
     "bridge": "node bridge",
     "bridge:watch": "nodemon bridge --ignore admin-panel",
-    "compliance": "node compliance",
-    "compliance:watch": "nodemon compliance",
-    "start": "stmux --mouse -- [ 'npm run bridge:watch' : 'npm run compliance:watch' ]"
+    "start": "node bridge"
   },
   "dependencies": {
     "blessed": "^0.1.81",

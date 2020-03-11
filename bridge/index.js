@@ -7,7 +7,7 @@ const PORT = process.env.BRIDGE_PORT || 3001;
 
 const app = express();
 app.use(cors());
-app.use(bodyParser());
+app.use(bodyParser.json());
 
 // Internal API for admin panel
 app.post("/admin/revoke", require("./revoke"));

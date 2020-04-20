@@ -1,30 +1,37 @@
-require("dotenv").config();
-const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const express = require("express");
 
-const PORT = process.env.BRIDGE_PORT || 3001;
+/**
+ * @callback rulesCallback
+ * @param {string} value
+ * @returns {boolean}
+ */
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+/**
+ * @param {rulesCallback} rules
+ */
+module.exports = function (rules) {
+  const middleware = [cors(), bodyParser.json()];
+  const router = express.Router();
+  router.use(cors());
+  router.use(bodyParser.json());
 
-// Internal API for admin panel
-app.post("/admin/revoke", require("./revoke"));
-app.get("/admin/list", require("./list"));
-app.get("/admin/logs", require("./log"));
+  // Internal API for admin panel
+  router.post("/admin/revoke", require("./revoke"));
+  router.get("/admin/list", require("./list"));
+  router.get("/admin/logs", require("./log"));
 
-// External API for wallets
-app.get("/.well-known/stellar.toml", require("./toml"));
-app.get("/api/deposit", require("./deposit"));
-app.get("/api/approve", require("./approve"));
-app.get("/api/approve/status", require("./revocationStatus"));
+  // External API for wallets
+  router.get("/.well-known/stellar.toml", require("./toml"));
+  router.get("/api/deposit", require("./deposit"));
+  router.get("/api/approve", require("./approve")(rules));
+  router.get("/api/approve/status", require("./revocationStatus"));
 
-app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500).send({ error: err });
-});
+  router.use(function (err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send({ error: err });
+  });
 
-app.listen(PORT, () => {
-  console.log(`Bridge listening on port ${PORT}`);
-});
+  return router;
+};

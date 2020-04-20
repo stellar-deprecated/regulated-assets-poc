@@ -4,23 +4,21 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "wallet": "node wallet.js",
-    "bridge": "node bridge",
-    "bridge:watch": "nodemon bridge --ignore admin-panel",
-    "start": "node bridge"
+    "admin": "cd admin-panel && yarn start",
+    "bridge": "node example",
+    "bridge:watch": "nodemon example --ignore admin-panel",
+    "start": "concurrently \"yarn run bridge:watch\" \"yarn run admin\""
   },
   "dependencies": {
-    "blessed": "^0.1.81",
     "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "node-fetch": "^2.6.0",
     "sequelize": "^5.21.5",
     "sqlite3": "^4.1.1",
-    "stellar-sdk": "^4.0.1",
-    "stmux": "^1.8.0",
-    "terminal-kit": "^1.33.15"
+    "stellar-sdk": "^4.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

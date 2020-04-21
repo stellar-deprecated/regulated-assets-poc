@@ -1,4 +1,5 @@
 const StellarSdk = require("stellar-sdk");
+const log = (m) => console.log(m);
 
 /**
  * @param {StellarSdk.Transaction} transaction Proposed transaction
@@ -7,7 +8,7 @@ const StellarSdk = require("stellar-sdk");
  * @returns {booelan} response.success Whether or not the proposed transaction should be allowed
  * @returns {string} response.error Optional error message if the transaction was rejected
  */
-const rules = (transaction, log) => {
+const rules = async (transaction) => {
   let totalAmount = 0;
   let assetsToParticipantMap = {};
   let participants = [];
@@ -28,14 +29,11 @@ const rules = (transaction, log) => {
       assetsToParticipantMap[code].add(operation.destination);
     }
   });
-  log(" ");
   log("Total Amount: " + totalAmount);
-  log(" ");
-  if (totalAmount <= 50) {
-    return { allowed: true };
-  } else {
+  if (totalAmount > 50) {
     return { allowed: false, error: "Total amount must be less than 50" };
   }
+  return { allowed: true };
 };
 
 module.exports = rules;

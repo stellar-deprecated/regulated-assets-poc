@@ -1,8 +1,7 @@
 const fetch = require("node-fetch");
 const e = require("express");
 const StellarSdk = require("stellar-sdk");
-const { Account } = require("./models");
-const truncateAddress = require("./util/truncateAddress");
+
 const { log } = require("./log");
 
 const server = new StellarSdk.Server("https://horizon-testnet.stellar.org");
@@ -33,7 +32,7 @@ module.exports = function (rules) {
       envelope,
       StellarSdk.Networks.TESTNET
     );
-    const rulesResponse = rules(tx, log);
+    const rulesResponse = await rules(tx, log);
     if (rulesResponse.error) {
       log("❌ Rejecting: " + rulesResponse.error);
       res.send({
@@ -43,30 +42,6 @@ module.exports = function (rules) {
       log(" ");
       log(" ");
       return;
-    }
-
-    log("<<< Consulting revoke blacklist >>>");
-
-    for (var i = 0; i < participants.length; i++) {
-      const participant = participants[i];
-      const dbAccount = await Account.findOne({
-        where: {
-          stellarAccount: participant,
-        },
-      });
-      if (dbAccount.status !== "active") {
-        const message = `Account ${truncateAddress(
-          participant
-        )} has had token access revoked`;
-        log(`❌ Rejecting: ${message}`);
-        res.send({
-          status: "rejected",
-          error: message,
-        });
-        log(" ");
-        log(" ");
-        return;
-      }
     }
 
     const [sourceAccount, feeStats] = await Promise.all([

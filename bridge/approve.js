@@ -10,7 +10,9 @@ const issuer = StellarSdk.Keypair.fromSecret(process.env.ISSUER_SECRET);
 /**
  * @callback rulesCallback
  * @param {StellarSdk.Transaction} transaction
- * @returns {boolean}
+ * @returns {Object} response
+ * @returns {boolean} response.allowed Whether or not the proposed transaction should be allowed
+ * @returns {string} response.error Optional error message if the transaction was rejected
  */
 
 /**

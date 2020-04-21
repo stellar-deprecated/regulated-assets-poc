@@ -5,7 +5,7 @@ const log = (m) => console.log(m);
  * @param {StellarSdk.Transaction} transaction Proposed transaction
  * @param {function} log Tracing for display in admin panel or logs
  * @returns {Object} response
- * @returns {booelan} response.success Whether or not the proposed transaction should be allowed
+ * @returns {boolean} response.allowed Whether or not the proposed transaction should be allowed
  * @returns {string} response.error Optional error message if the transaction was rejected
  */
 const rules = async (transaction) => {

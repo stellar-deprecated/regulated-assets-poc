@@ -1,12 +1,27 @@
 # Regulated Assets Proof of Concept
 
-This is a proof of concept demo for showing how to use SEP-8 to control regulated assets on the stellar network.  Technical description can be found here: https://docs.google.com/document/d/1sZjJBYZSGhD-iGds0fKKYDoDuOsSpoFnPlrERarQPlY/edit
+An express middleware adding SEP-8 compliance to your project by specifying your own ruleset.  For more information on how this works see the blog post [TBD].
 
-An extremely hacked up stellar wallet that integrates with this can be found at this branch: https://github.com/msfeldstein/stellar-demo-wallet/tree/AddRegAssets
+## Usage
 
+See the [example](/example/index.js) project for a full implementation that implements a simple "Transaction must be less than an amount of 50" ruleset.
+
+```
+const regulatedAssetBridge = require("regulated-assets");
+const app = express();
+app.use(regulatedAssetBridge(rules));
+app.use(regulatedAssetBridge.toml);
+app.listen(PORT);
+```
+
+The bridge can be used by providing a set of `rules`.  The rules should be an async function that takes in a [StellarSdk.Transaction](https://stellar.github.io/js-stellar-sdk/Transaction.html), and returns an object with an `allowed` boolean and optional `error` string message.  You can do whatever you need inside this rules function to validate whether the proposed transaction should be allowed, including querying the stellar ledger via horizon, external API calls to talk to another part of your service, or just a set of basic rules.
+
+Once you return that a transaction is allowed, the bridge takes care of the rest of the communication with the new sandwiched transaction.
+
+### Wallets
+
+Currently there is a branch that adds support for regulated assets here: https://github.com/msfeldstein/stellar-demo-wallet/tree/AddRegAssets.  The features will be added to the main project shortly.
 
 ### Notes
 
 Controlling Asset Holders using AUTHORIZATION_REQUIRED: https://www.stellar.org/developers/guides/concepts/assets.html#controlling-asset-holders
-
-We need to add a way (to the SEP) for wallets to check status of revocation since they'll hold tokens but should show ahead of time if they've been clawed back

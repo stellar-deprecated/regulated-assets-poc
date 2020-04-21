@@ -1,4 +1,4 @@
-# Regulated Assets Proof of Concept
+# Regulated Assets Bridge Server
 
 An express middleware adding SEP-8 compliance to your project by specifying your own ruleset.  For more information on how this works see the blog post [TBD].
 

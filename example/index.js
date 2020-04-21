@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const rules = require("./rules");
-const regulatedAssetBridge = require("../bridge");
+const regulatedAssetBridge = require("..");
 
 const PORT = process.env.BRIDGE_PORT || 3001;
 const app = express();

@@ -13,7 +13,7 @@ const BridgeRoutes = function (rules) {
   const router = express.Router();
   router.use(cors());
   router.use(bodyParser.json());
-  router.get("/api/approve", require("./approve")(rules));
+  router.get("/api/approve", require("./bridge/approve")(rules));
 
   router.use(function (err, req, res, next) {
     console.error(err.stack);
@@ -24,6 +24,6 @@ const BridgeRoutes = function (rules) {
 };
 
 BridgeRoutes.toml = express.Router();
-BridgeRoutes.toml.get("/.well-known/stellar.toml", require("./toml"));
+BridgeRoutes.toml.get("/.well-known/stellar.toml", require("./bridge/toml"));
 
 module.exports = BridgeRoutes;

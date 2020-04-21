@@ -993,6 +993,18 @@ registry-url@^3.0.3:
   dependencies:
     rc "^1.0.1"
 
+regulated-assets@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/regulated-assets/-/regulated-assets-1.0.0.tgz#b4dba2f7a6d37bca0bf874b471fe8bf3bc94dca8"
+  integrity sha512-PUNt63YZ7mHpcwDC5gV/DMnwWx7Hk6X9y+MTS0t8vq9u0xegy/rAoYb2HGZDIvNBD85CQgkYTpJfpexskJr4SA==
+  dependencies:
+    body-parser "^1.19.0"
+    cors "^2.8.5"
+    dotenv "^8.2.0"
+    express "^4.17.1"
+    node-fetch "^2.6.0"
+    stellar-sdk "^4.0.1"
+
 requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"

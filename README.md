@@ -6,9 +6,9 @@ An express middleware adding SEP-8 compliance to your project by specifying your
 
 See the [example](/example/index.js) project for a full implementation that implements a simple "Transaction must be less than an amount of 50" ruleset.
 
-### Env file
+### Env Vars
 
-In your `.env` file add entries for `ASSET_CODE` and `ISSUER_SECRET` so that the bridge can sign approval transactions.
+Add `ASSET_CODE` and `ISSUER_SECRET` environment variables so that the bridge can sign approval transactions.
 
 ### Implementation
 

@@ -56,7 +56,16 @@ module.exports = function (rules) {
       fee: feeStats.fee_charged.p90,
       networkPassphrase: StellarSdk.Networks.TESTNET,
     });
-
+    let assetsToParticipantMap = {};
+    tx.operations.forEach((operation) => {
+      if (operation.type === "payment") {
+        const code = operation.asset.getCode();
+        assetsToParticipantMap[code] =
+          assetsToParticipantMap[code] || new Set();
+        assetsToParticipantMap[code].add(operation.source || tx.source);
+        assetsToParticipantMap[code].add(operation.destination);
+      }
+    });
     const setParticipantAuthorizations = (allow) => {
       Object.keys(assetsToParticipantMap).forEach((asset) => {
         const participants = assetsToParticipantMap[asset];

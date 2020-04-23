@@ -12,9 +12,7 @@ const assetCode = process.env.ASSET_CODE;
  * @returns {string} response.error Optional error message if the transaction was rejected
  */
 const rules = async (transaction) => {
-  let totalAmount = 0;
-  let assetsToParticipantMap = {};
-  let participants = [];
+  const paymentOperations = [];
   log("Checking operations in proposed transaction");
   transaction.operations.forEach((operation) => {
     log("  Type: " + operation.type);
@@ -22,43 +20,41 @@ const rules = async (transaction) => {
     log("  Destination: " + operation.destination);
     log("  Asset: " + operation.asset.getCode());
     log("  Amount: " + operation.amount);
-    participants.push(operation.destination);
-    participants.push(operation.source || transaction.source);
     if (operation.type === "payment") {
-      const code = operation.asset.getCode();
-      assetsToParticipantMap[code] = assetsToParticipantMap[code] || new Set();
-      totalAmount += parseFloat(operation.amount);
-      assetsToParticipantMap[code].add(operation.source || transaction.source);
-      assetsToParticipantMap[code].add(operation.destination);
+      paymentOperations.push(operation);
     }
   });
-  log("Total Amount: " + totalAmount);
-  if (totalAmount > 50) {
-    return { allowed: false, error: "Total amount must be less than 50" };
+  if (paymentOperations.length != 1) {
+    return {
+      allowed: false,
+      error:
+        "Only transactions with a single payment operation can be approved in this example.",
+    };
+  }
+  const paymentOp = paymentOperations[0];
+
+  if (parseFloat(paymentOp.amount) > 50) {
+    return { allowed: false, error: "Payment amount must be less than 50" };
   }
 
-  for (var i = 0; i < transaction.operations.length; i++) {
-    const op = transaction.operations[i];
-    const { destination } = op;
-    const account = await server.loadAccount(destination);
-    const balance = account.balances.find(
-      (balance) =>
-        balance.asset_code === assetCode &&
-        balance.asset_issuer === issuer.publicKey()
-    );
-    if (!balance) {
-      return {
-        allowed: false,
-        error: "Destination has no trustline to the asset",
-      };
-    }
-    if (balance.balance + parseFloat(op.amount) > 1000) {
-      return {
-        allowed: false,
-        error:
-          "Payment would put destination account above the 1000 token limit",
-      };
-    }
+  const destination = paymentOp.destination;
+  const account = await server.loadAccount(destination);
+  const balance = account.balances.find(
+    (balance) =>
+      balance.asset_code === assetCode &&
+      balance.asset_issuer === issuer.publicKey()
+  );
+  if (!balance) {
+    return {
+      allowed: false,
+      error: "Destination has no trustline to the asset",
+    };
+  }
+  if (balance.balance + parseFloat(paymentOp.amount) > 1000) {
+    return {
+      allowed: false,
+      error: "Payment would put destination account above the 1000 token limit",
+    };
   }
   return { allowed: true };
 };

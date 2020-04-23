@@ -4,11 +4,12 @@ An express middleware adding SEP-8 compliance to your project by specifying your
 
 ## Usage
 
-See the [example](/example/index.js) project for a full implementation that implements a simple "Transaction must be less than an amount of 50" ruleset.
+See the [example](/example/index.js) project for a full implementation that implements a simple "Transaction must be less than an amount of 50, and accounts can hold a maximum of 1000 tokens" ruleset.
 
 ### Env Vars
 
 Add `ASSET_CODE` and `ISSUER_SECRET` environment variables so that the bridge can sign approval transactions.
+`BRIDGE_HOSTNAME` is required if you use the TOML middleware, and should contain the hostname the approval server will be located at.
 
 ### Implementation
 

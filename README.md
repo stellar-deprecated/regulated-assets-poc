@@ -10,6 +10,17 @@ See the [example](/example/index.js) project for a full implementation that impl
 
 Add `ASSET_CODE` and `ISSUER_SECRET` environment variables so that the bridge can sign approval transactions.
 `BRIDGE_HOSTNAME` is required if you use the TOML middleware, and should contain the hostname the approval server will be located at.
+`HOME_DOMAIN` is required if you want to use the included scripts to set up your issuer account.  `HOME_DOMAIN` should be where your TOML is hosted, and doesn't necessarily need to be the same domain as the bridge.
+
+### Issuing an asset
+
+To quickly set up an issuer account, use the `scripts/setup-issuer.js` script.  Ensure your env vars are set up and run:
+
+`$ node scripts/setup-issuer.js`
+
+This will set up the issuer account with the proper flags.  To actually issue an asset, use the `scripts/issue-asset-to-address.js` script.  This can be used to either issue a batch amount to a distribution account, or ad-hoc issuance to clients.
+
+`$ node scripts/issue-asset-to-address.js <amount> <wallet address>`
 
 ### Implementation
 
